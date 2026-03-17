@@ -51,13 +51,23 @@ def search_book(event=None):
             listbox_books.insert(tk.END, book["titre"])
     else:
         messagebox.showwarning("Aucun résultat", "Aucun livre trouvé avec ce titre ou mot clé.")
+def trouver_index(liste,element): #fonction de Mathurine
+    for i in range(len(liste)):
+        if liste[i]==element:
+            return i
+    return -1
+
 
 def edit_book():
     selected_indices = listbox_books.curselection()
+    if selected_indices :
+        selected_index = selected_indices[0]
+        selected_item = listbox_books.get(selected_index)
     if not selected_indices:
         messagebox.showwarning("Sélection requise", "Veuillez sélectionner un livre à modifier.")
-        return
-    selected_index = selected_indices[0]
+        return 
+    liste_titres=[books[i]["titre"] for i in range(len(books))]
+    selected_index = trouver_index(liste_titres,selected_item)
     # Charge les infos du livre sélectionné dans le formulaire
     selected_book = books[selected_index]
     entry_title.delete(0, tk.END)

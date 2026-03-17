@@ -108,7 +108,7 @@ function afficherLivres(resultats) {
                 <div class="separateur"></div>
                 <div class="details">
                     <h3>${livre.titre}</h3>
-                    ${livre.auteur && livre.auteur.trim() !== "" ? `<p><strong>Auteur:</strong> ${livre.auteur}</p>` : ''}
+                    ${livre.auteur && livre.auteur.trim() !== "" ? `<p><strong>Auteur(s):</strong> ${livre.auteur}</p>` : ''}
                     <p><strong>Emplacement:</strong> ${emplacement}</p>
                     <p><strong>Résumé:</strong> <span class="resume-court">${resumeCourt}</span><span class="resume-complet" style="display: none;">${resumeComplet}</span>${voirPlus}</p>
                 </div>

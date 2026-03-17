@@ -1359,7 +1359,7 @@
         "avis": [
             "Une série de livres vraiment cool dans un genre qu'on pourrait qualifier de fantasy urbaine. L'idée de créer un univers de ce style là est assez originale et loin de celle qu'on se fait du fantasy que ce soit avec le Seigneur des Anneaux, Eragon ou bien les univers de Gwendalavir et Terre-Dragon pour ne citer qu'Érik L'Homme et Pierre Bottero. Pourtant, l'idée de faire se dérouler les aventures de nos héros en ville et à notre époque fonctionne vraiment bien. Les personnages sont vraiment drôles, ce qui donne une ambiance plus sympa que flippante à la série. Par contre on est d'accord que Pierre Bottero a une obsession avec les jeunes filles hyper fortes qui tabassent les méchants hommes qui voudraient les violer ?"
         ],
-        "resume": "13, rue du Horla. Antenne parisienne de l'Association. Cette mystérieuse organisation veille à canaliser les débordements des Anormaux dans le monde humain. Nouvel agent stagiaire, Jasper, lycéen à l'humour corrosif, est recruté pour ses dons exceptionnels en sorcellerie. Sa première mission: démanteler un traffic de drogue chez les vampires..."
+        "resume": "13, rue du Horla. Antenne parisienne de l'Association. Cette mystérieuse organisation veille à canaliser les débordements des Anormaux dans le monde humain. Nouvel agent stagiaire, Jasper, lycéen à l'humour corrosif, est recruté pour ses dons exceptionnels en sorcellerie. Sa première mission: démanteler un traffic de drogue chez les vampires...\nL'histoire alterne entre les points de vue des deux héros, Ombe, une fille qui n'a pas peur du risque, et Jasper, un magicien qui à un humour particulier. Le récit est amusant car les deux personnages le sont et que les auteurs font de nombreux clins d'œil à des références."
     },
     {
         "id": 70,
@@ -2052,7 +2052,9 @@
             "combat"
         ],
         "mention_speciale": true,
-        "avis": [],
+        "avis": [
+            "L'histoire est vraiment prenante et les personnages sont drôles et attachants. Le récit alterne entre la vision d'Auguste Mars et le journal de sa petite soeur Césarine. Cela rend le livre amusant car les points de vue et les caractères de ces deux personnages sont très différents. Auguste, qui a la langue bien pendue, rend l'histoire amusante (comme lorsqu'il apprend l'Internationale au fils de ses voisins !) tandis que Césarine, de ses yeux d'autiste, voit le monde de manière logique et est décalée par rapport aux autres."
+        ],
         "resume": "Même pas besoin de mettre de résumé. Ces 3 livres sont absolument géniaux. On a des méchants bien définis, ce qui permet qux personnages de leur faire tout le mal qu'ils veulent sans avoir de reproches à se faire. En ce qui concerne nos héros, que pourrait-on avoir de mieux sinon un garçon très drôle clairement trop doué dans toutes les techniques de combat et une petite asperger hyper attachante (même si là on est un peu dans l'abus en ce qui concerne les clichés). Le livre est plein de blagues très marrantes et l'ambiance reste cool. L'histoire est elle aussi géniale, mais pour ça, je ne vois rien de mieux que de citer un petit passage, Julie la mère d'Auguste parle à son fils: <br>\n\" - J'espère que tu n'as pas oublié tes leçons de tir, me dit-elle en me tendant un pistolet automatique. Tu lèves la sécurité, tu vises, tu tires douze coups, tu éjectes, tu recharges. Ils auront sûrmement des gilets pare-balles alors vise la tête. \""
     },
     {
@@ -3363,5 +3365,106 @@
         "mention_speciale": false,
         "avis": [],
         "resume": "À l'origine, il y a Paris. Et un flâneur infatigable qui explore ses deux rives depuis des années. De cette expérience amoureuse, il a distillé au fil des jours 100 cartes incongrues. 100 cartes pour dire tout ce qu'on ne sait pas. 100 cartes pour rêver tout ce qu'on ne voit pas.<br>\n\nÀ l'origine, il y a Paris. Et un flâneur infatigable qui explore ses deux rives depuis des années. De cette expérience amoureuse, il a distillé au fil des jours 100 cartes incongrues. Sur chacune se dessine une vision : on y découvre ainsi toutes les rues depuis lesquelles on peut apercevoir la Tour Eiffel, celles où les barricades avaient été installées lors de la Commune de 1871, les quartiers définis selon la provenance de l'eau dans votre robinet, les îles disparues que l'on trouvait autrefois sur la Seine, le trajet du premier vol habité (en montgolfière)..."
+    },
+    {
+        "id": 178,
+        "titre": "Le Mur invisible",
+        "auteur": "Marlen Haushofer",
+        "emplacement": "",
+        "image": "images/murinvisible.jpg",
+        "mots_cles": [
+            "Marlen Haushofer",
+            "nature",
+            "robinson",
+            "survie"
+        ],
+        "mention_speciale": false,
+        "avis": [],
+        "resume": "Voici le roman le plus célèbre et le plus émouvant de Marlen Haushofer, journal de bord d'une femme ordinaire, confrontée à une expérience - limite. Après une catastrophe planétaire, l'héroïne se retrouve seule dans un chalet en pleine forêt autrichienne, séparée du reste du monde par un mur invisible au-delà duquel toute vie semble s'être pétrifiée durant la nuit. Tel un moderne Robinson, elle organise sa survie en compagnie de quelques animaux familiers, prend en main son destin dans un combat quotidien contre la forêt, les intempéries et la maladie. Et ce qui aurait pu être un simple exercice de style sur un thème à la mode prend dès lors la dimension d'une aventure bouleversante où le labeur, la solitude et la peur constituent les conditions de l'expérience humaine."
+    },
+    {
+        "id": 179,
+        "titre": "La connaissance de la vie",
+        "auteur": "Georges Canguilhem",
+        "emplacement": "",
+        "image": "",
+        "mots_cles": [
+            "vie",
+            "vivant",
+            "biologique",
+            "philosophie",
+            "science"
+        ],
+        "mention_speciale": false,
+        "avis": [],
+        "resume": "Les études réunies dans cet ouvrage datent des années 1945-50, à l'exception de la dernière. Depuis quarante ans l'auteur n'a pas ignoré les découvertes et les révolutions conceptuelles dans les sciences biologiques. Il n'a donc pas répugné à reconnaître l'archaïsme de certaines de ses premières positions et propositions. Mais il maintient que « nouvelle connaissance » n'entraîne pas, pour le philosophe, l'abandon du projet inspirateur de La connaissance de la vie : s'interroger sur l'étonnant opportunisme de la relation des vivants avec leur milieux, sur l'originalité de cette présence au monde qu'on nomme la vie, alors même que, selon un grand biologiste français, « on n'interroge plus la vie aujourd'hui dans les laboratoires »."
+    },
+    {
+        "id": 180,
+        "titre": "Knight Club",
+        "auteur": "Arthur de Pins",
+        "emplacement": "BD",
+        "image": "images/knightclub.jpg",
+        "mots_cles": [
+            "chevaliers",
+            "Jerusalem",
+            "croisés",
+            "croisade",
+            "francs",
+            "armure",
+            "forgeron",
+            "séraphine",
+            "Moyen âge"
+        ],
+        "mention_speciale": false,
+        "avis": [],
+        "resume": "Bienvenue au XIIe siècle, cette époque délicieuse où porter une armure en métal sous un soleil brûlant est à la mode ! Séraphine, forgeronne émérite, arpente les déserts brûlants de la Terre sainte à la recherche d'une escouade de guerriers assez téméraires ? ou inconscients ? pour protéger son village natal des croisés Francs qui menacent de revenir piller les habitants sous peu.<br>\nAprès un casting rocambolesque à Jérusalem, l'armurière parvient à rassembler une équipe des plus redoutables... mais aux origines bien différentes ! La cohabitation promet d'être explosive et hilarante, entre les conflits culturels incessants et les discussions enflammées sur les tactiques guerrières, les recettes locales ou les styles vestimentaires. Mais derrière cette farce permanente, une certitude émerge : pour défendre leur village, ils devront d'abord réussir à ne pas s'entretuer. Et ça, c'est loin d'être gagné !"
+    },
+    {
+        "id": 181,
+        "titre": "Knight Club",
+        "auteur": "Arthur de Pins",
+        "emplacement": "BD",
+        "image": "images/knightclub.jpg",
+        "mots_cles": [
+            "chevaliers",
+            "Jerusalem",
+            "croisés",
+            "croisade",
+            "francs",
+            "armure",
+            "forgeron",
+            "séraphine",
+            "Moyen-âge",
+            "Moyen âge"
+        ],
+        "mention_speciale": false,
+        "avis": [],
+        "resume": "Bienvenue au XIIe siècle, cette époque délicieuse où porter une armure en métal sous un soleil brûlant est à la mode ! Séraphine, forgeronne émérite, arpente les déserts brûlants de la Terre sainte à la recherche d'une escouade de guerriers assez téméraires ? ou inconscients ? pour protéger son village natal des croisés Francs qui menacent de revenir piller les habitants sous peu.<br>\nAprès un casting rocambolesque à Jérusalem, l'armurière parvient à rassembler une équipe des plus redoutables... mais aux origines bien différentes ! La cohabitation promet d'être explosive et hilarante, entre les conflits culturels incessants et les discussions enflammées sur les tactiques guerrières, les recettes locales ou les styles vestimentaires. Mais derrière cette farce permanente, une certitude émerge : pour défendre leur village, ils devront d'abord réussir à ne pas s'entretuer. Et ça, c'est loin d'être gagné !"
+    },
+    {
+        "id": 182,
+        "titre": "Le lycée Henri-IV<br>Entre potaches et moines copistes",
+        "auteur": "Sophie Peltier-Le Dinh, Danielle Michel-Chich et André Arnold-Peltier",
+        "emplacement": "",
+        "image": "images/lyceeh4.jpg",
+        "mots_cles": [
+            "Henri IV",
+            "H4",
+            "Henri 4",
+            "clovis",
+            "coupole",
+            "meilleur",
+            "panthéon",
+            "école",
+            "orchestre",
+            "cloître",
+            "cloitre"
+        ],
+        "mention_speciale": false,
+        "avis": [
+            "Malheureusement, il n'y pas que des génies qui ont fait ce lycée. Il y a Léon aussi.<br> Mathurine"
+        ],
+        "resume": "C'est un livre de 2008 sur le lycée Henri-IV, meilleur lycée de France. On y voit des témoignages d'élèves, de professeurs et de célébrités (nombreuses bien sûr) qui ont étudié dans ce lycée. On y voit également une photo du meilleur orchestre du monde."
     }
 ]
