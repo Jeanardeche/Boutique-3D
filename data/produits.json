@@ -1,0 +1,34 @@
+[
+    {
+        "id": 1,
+        "nom": "saucisse en 3D",
+        "prix": "432€",
+        "image": "images/1.jpeg",
+        "description": "blougi",
+        "couleurs_disponibles": "Jaune"
+    },
+    {
+        "id": 3,
+        "nom": "objet 1",
+        "prix": "15€",
+        "image": "images/3.jpeg",
+        "description": "",
+        "couleurs_disponibles": "Gris,Jaune,Vert"
+    },
+    {
+        "id": 4,
+        "nom": "nom de l'objet1",
+        "prix": "230€",
+        "image": "images/1.jpeg",
+        "description": "description",
+        "couleurs_disponibles": "Argent,Blanc,Bleu,Gris,Jaune,Noir,Or,Orange,Rose,Rouge,Vert,Violet"
+    },
+    {
+        "id": 5,
+        "nom": "Dinosaure flexible qui offre coeur",
+        "prix": "5€",
+        "image": "images/image.png",
+        "description": "Ce dinosaure est parfait pour offrir à ceux qu'on aime. Il est conçu pour être flexible et pouvoir bouger un peu la queue.",
+        "couleurs_disponibles": "Jaune,Orange,Rouge,Vert,Violet"
+    }
+]

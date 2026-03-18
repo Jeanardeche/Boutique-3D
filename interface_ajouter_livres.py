@@ -1,132 +1,203 @@
 import tkinter as tk
 from tkinter import messagebox, filedialog
-import json
 import os
+import sqlite3
+import json
+import shutil
+
+# --- Configuration de la base de données ---
+DB_PATH = "data/boutique.db"
+
+def init_db():
+    """Crée la base de données et la table si elles n'existent pas."""
+    os.makedirs(os.path.dirname(DB_PATH), exist_ok=True)
+    conn = sqlite3.connect(DB_PATH)
+    cursor = conn.cursor()
+    cursor.execute("""
+    CREATE TABLE IF NOT EXISTS produits (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        nom TEXT NOT NULL,
+        prix TEXT,
+        image TEXT,
+        description TEXT,
+        couleurs_disponibles TEXT
+    )
+    """)
+    # Essaye d'ajouter la colonne pour les anciennes bases de données, ignore si elle existe déjà
+    try:
+        cursor.execute("ALTER TABLE produits ADD COLUMN couleurs_disponibles TEXT")
+    except sqlite3.OperationalError:
+        pass # La colonne existe déjà
+
+    # Création de la table de référence des couleurs
+    cursor.execute("CREATE TABLE IF NOT EXISTS couleurs_ref (nom TEXT PRIMARY KEY, code_hex TEXT)")
+    
+    # Vérifier si la table couleurs est vide, si oui, ajouter les défauts
+    cursor.execute("SELECT count(*) FROM couleurs_ref")
+    if cursor.fetchone()[0] == 0:
+        defaults = [
+            ("Blanc", "white"), ("Noir", "black"), ("Gris", "#808080"),
+            ("Bleu", "#007bff"), ("Rouge", "#dc3545"), ("Vert", "#28a745"),
+            ("Jaune", "#ffc107"), ("Violet", "#6f42c1"), ("Orange", "#fd7e14"),
+            ("Rose", "#e83e8c"), ("Or", "#FFD700"), ("Argent", "#C0C0C0")
+        ]
+        cursor.executemany("INSERT INTO couleurs_ref VALUES (?, ?)", defaults)
+
+    conn.commit()
+    conn.close()
+
+
+def export_json():
+    """Exporte la base de données en fichier JSON pour le site web."""
+    conn = sqlite3.connect(DB_PATH)
+    conn.row_factory = sqlite3.Row
+    cursor = conn.cursor()
+    cursor.execute("SELECT * FROM produits")
+    rows = cursor.fetchall()
+    conn.close()
+    
+    products_list = [dict(row) for row in rows]
+    try:
+        with open("data/produits.json", "w", encoding="utf-8") as f:
+            json.dump(products_list, f, indent=4, ensure_ascii=False)
+    except Exception as e:
+        messagebox.showerror("Erreur Export", f"Erreur lors de l'export JSON : {e}")
 
 # --- Fonctions de gestion des livres ---
 
-def load_books():
-    try:
-        with open("data/livres.json", "r", encoding="utf-8") as file:
-            return json.load(file)
-    except FileNotFoundError:
-        return []
-
-def save_books(books):
-    with open("data/livres.json", "w", encoding="utf-8") as file:
-        json.dump(books, file, ensure_ascii=False, indent=4)
+def load_products():
+    """Charge les livres depuis la base de données SQLite."""
+    conn = sqlite3.connect(DB_PATH)
+    conn.row_factory = sqlite3.Row  # Permet d'accéder aux colonnes par leur nom
+    cursor = conn.cursor()
+    cursor.execute("SELECT * FROM produits ORDER BY nom")
+    rows = cursor.fetchall()
+    conn.close()
+    
+    # Convertit les lignes de la base de données en une liste de dictionnaires
+    return [dict(row) for row in rows]
 
 def refresh_listbox():
-    listbox_books.delete(0, tk.END)
-    for book in books:
-        listbox_books.insert(tk.END, book["titre"])
+    listbox_products.delete(0, tk.END)
+    for product in products:
+        listbox_products.insert(tk.END, f"{product['nom']} - {product['prix']}")
 
-def add_book():
-    new_book = {
-        "id": len(books) + 1,
-        "titre": entry_title.get(),
-        "auteur": entry_author.get(),
-        "emplacement": entry_location.get(),
-        "image": entry_image.get(),
-        "mots_cles": [kw.strip() for kw in entry_keywords.get().split(",") if kw.strip()],
-        "mention_speciale": var_special.get(),
-        # Modifié ici pour éviter d'ajouter des avis vides
-        "avis": [line.strip() for line in entry_reviews.get("1.0", tk.END).strip().split("\n") if line.strip()],
-        "resume": entry_summary.get("1.0", tk.END).strip()
-    }
-    books.append(new_book)
-    save_books(books)
-    messagebox.showinfo("Succès", "Le livre a été ajouté avec succès.")
+def add_product():
+    nom = entry_nom.get()
+    prix = entry_prix.get().replace("€", "").strip() + "€"
+    image = entry_image.get()
+    description = entry_description.get("1.0", tk.END).strip()
+    # Récupère les couleurs cochées
+    couleurs = ",".join([color for color, var in color_vars.items() if var.get()])
+
+    if not nom or not prix:
+        messagebox.showwarning("Attention", "Le nom et le prix sont obligatoires.")
+        return
+
+    conn = sqlite3.connect(DB_PATH)
+    cursor = conn.cursor()
+    cursor.execute("""
+        INSERT INTO produits (nom, prix, image, description, couleurs_disponibles)
+        VALUES (?, ?, ?, ?, ?)
+    """, (nom, prix, image, description, couleurs))
+    conn.commit()
+    conn.close()
+
+    export_json()
+    messagebox.showinfo("Succès", "L'objet 3D a été ajouté.")
     clear_fields()
+    global products
+    products = load_products()
     refresh_listbox()
 
 
-def search_book(event=None):
-    search_term = entry_search.get().lower()
-    results = [book for book in books if search_term in book["titre"].lower() 
-               or any(search_term in kw.lower() for kw in book["mots_cles"])]
-    listbox_books.delete(0, tk.END)
-    if results:
-        for book in results:
-            listbox_books.insert(tk.END, book["titre"])
-    else:
-        messagebox.showwarning("Aucun résultat", "Aucun livre trouvé avec ce titre ou mot clé.")
-def trouver_index(liste,element): #fonction de Mathurine
-    for i in range(len(liste)):
-        if liste[i]==element:
-            return i
-    return -1
-
-
-def edit_book():
-    selected_indices = listbox_books.curselection()
-    if selected_indices :
-        selected_index = selected_indices[0]
-        selected_item = listbox_books.get(selected_index)
+def edit_product():
+    selected_indices = listbox_products.curselection()
     if not selected_indices:
-        messagebox.showwarning("Sélection requise", "Veuillez sélectionner un livre à modifier.")
-        return 
-    liste_titres=[books[i]["titre"] for i in range(len(books))]
-    selected_index = trouver_index(liste_titres,selected_item)
-    # Charge les infos du livre sélectionné dans le formulaire
-    selected_book = books[selected_index]
-    entry_title.delete(0, tk.END)
-    entry_title.insert(0, selected_book["titre"])
-    entry_author.delete(0, tk.END)
-    entry_author.insert(0, selected_book["auteur"])
-    entry_location.delete(0, tk.END)
-    entry_location.insert(0, selected_book["emplacement"])
-    entry_image.delete(0, tk.END)
-    entry_image.insert(0, selected_book["image"])
-    entry_keywords.delete(0, tk.END)
-    entry_keywords.insert(0, ", ".join(selected_book["mots_cles"]))
-    var_special.set(selected_book["mention_speciale"])
-    entry_reviews.delete("1.0", tk.END)
-    entry_reviews.insert("1.0", "\n".join(selected_book["avis"]))
-    entry_summary.delete("1.0", tk.END)
-    entry_summary.insert("1.0", selected_book["resume"])
-    # Active le bouton de sauvegarde en liant la fonction de sauvegarde au livre sélectionné
-    btn_save.config(state="normal", command=lambda: save_changes(selected_index))
+        messagebox.showwarning("Sélection requise", "Veuillez sélectionner un objet à modifier.")
+        return
 
-def save_changes(index):
-    books[index]["titre"] = entry_title.get()
-    books[index]["auteur"] = entry_author.get()
-    books[index]["emplacement"] = entry_location.get()
-    books[index]["image"] = entry_image.get()
-    books[index]["mots_cles"] = [kw.strip() for kw in entry_keywords.get().split(",") if kw.strip()]
-    books[index]["mention_speciale"] = var_special.get()
-    # Modifié ici pour éviter d'ajouter des avis vides
-    books[index]["avis"] = [line.strip() for line in entry_reviews.get("1.0", tk.END).strip().split("\n") if line.strip()]
-    books[index]["resume"] = entry_summary.get("1.0", tk.END).strip()
-    save_books(books)
-    messagebox.showinfo("Succès", "Les informations du livre ont été mises à jour.")
+    # On utilise l'index de la sélection, c'est plus fiable que de parser le texte.
+    selected_index = selected_indices[0]
+    selected_product = products[selected_index]
+
+    entry_nom.delete(0, tk.END)
+    entry_nom.insert(0, selected_product["nom"])
+    entry_prix.delete(0, tk.END)
+    entry_prix.insert(0, selected_product["prix"].replace("€", ""))
+    entry_image.delete(0, tk.END)
+    entry_image.insert(0, selected_product["image"])
+    entry_description.delete("1.0", tk.END)
+    entry_description.insert("1.0", selected_product["description"])
+    
+    # Cocher les couleurs existantes
+    saved_colors = selected_product.get("couleurs_disponibles", "")
+    if saved_colors:
+        saved_colors_list = [c.strip() for c in saved_colors.split(",")]
+    else:
+        saved_colors_list = []
+
+    for color, var in color_vars.items():
+        var.set(color in saved_colors_list)
+    
+    btn_save.config(state="normal", command=lambda: save_changes(selected_product['id']))
+
+def save_changes(product_id):
+    nom = entry_nom.get()
+    prix = entry_prix.get().replace("€", "").strip() + "€"
+    image = entry_image.get()
+    description = entry_description.get("1.0", tk.END).strip()
+    # Récupère les couleurs cochées
+    couleurs = ",".join([color for color, var in color_vars.items() if var.get()])
+
+    conn = sqlite3.connect(DB_PATH)
+    cursor = conn.cursor()
+    cursor.execute("""
+        UPDATE produits 
+        SET nom=?, prix=?, image=?, description=?, couleurs_disponibles=?
+        WHERE id=?
+    """, (nom, prix, image, description, couleurs, product_id))
+    conn.commit()
+    conn.close()
+
+    export_json()
+    messagebox.showinfo("Succès", "Produit mis à jour.")
     clear_fields()
     btn_save.config(state="disabled")
+    global products
+    products = load_products()
     refresh_listbox()
 
 
-def delete_book():
-    selected_indices = listbox_books.curselection()
+def delete_product():
+    global products
+    selected_indices = listbox_products.curselection()
     if not selected_indices:
-        messagebox.showwarning("Sélection requise", "Veuillez sélectionner un livre à supprimer.")
+        messagebox.showwarning("Sélection requise", "Veuillez sélectionner un objet à supprimer.")
         return
+
+    # On utilise l'index de la sélection pour plus de fiabilité.
     selected_index = selected_indices[0]
-    selected_book = books[selected_index]
-    response = messagebox.askyesno("Confirmer la suppression", f"Voulez-vous vraiment supprimer le livre '{selected_book['titre']}' ?")
+    selected_product = products[selected_index]
+    response = messagebox.askyesno("Confirmer", f"Supprimer '{selected_product['nom']}' ?")
     if response:
-        del books[selected_index]
-        save_books(books)
-        messagebox.showinfo("Succès", "Le livre a été supprimé.")
+        conn = sqlite3.connect(DB_PATH)
+        cursor = conn.cursor()
+        cursor.execute("DELETE FROM produits WHERE id=?", (selected_product['id'],))
+        conn.commit()
+        conn.close()
+        export_json()
+        messagebox.showinfo("Succès", "Objet supprimé.")
+        products = load_products()
         refresh_listbox()
 
 def clear_fields():
-    entry_title.delete(0, tk.END)
-    entry_author.delete(0, tk.END)
-    entry_location.delete(0, tk.END)
+    entry_nom.delete(0, tk.END)
+    entry_prix.delete(0, tk.END)
     entry_image.delete(0, tk.END)
-    entry_keywords.delete(0, tk.END)
-    entry_reviews.delete("1.0", tk.END)
-    entry_summary.delete("1.0", tk.END)
+    entry_description.delete("1.0", tk.END)
+    for var in color_vars.values():
+        var.set(False)
 
 def select_image():
     file_path = filedialog.askopenfilename(
@@ -134,8 +205,19 @@ def select_image():
         filetypes=(("Images", "*.jpg;*.jpeg;*.png"), ("Tous", "*.*"))
     )
     if file_path:
-        # Ajouter le préfixe "images/" et récupérer le nom du fichier
-        image_filename = "images/" + os.path.basename(file_path)
+        # Créer le dossier images s'il n'existe pas
+        dest_dir = os.path.join(os.path.dirname(__file__), "images")
+        os.makedirs(dest_dir, exist_ok=True)
+
+        # Copier l'image dans le dossier du projet
+        filename = os.path.basename(file_path)
+        dest_path = os.path.join(dest_dir, filename)
+        try:
+            shutil.copy(file_path, dest_path)
+        except shutil.SameFileError:
+            pass
+
+        image_filename = "images/" + filename
         entry_image.delete(0, tk.END)
         entry_image.insert(0, image_filename)
 
@@ -148,35 +230,26 @@ def on_mouse_wheel(event):
 # --- Création de l'interface ---
 
 root = tk.Tk()
-root.title("Bibliothèque")
+root.title("Gestion Boutique 3D")
 root.geometry("800x600")
 root.resizable(True, True)
 
-books = load_books()
-search_results = []
+init_db()
+products = load_products()
 
 # --- Partie haute : Recherche et liste des livres ---
 
 top_frame = tk.Frame(root)
 top_frame.pack(fill="both", expand=True, padx=10, pady=5)
 
-label_search = tk.Label(top_frame, text="Rechercher un livre (titre ou mots clés)", font=("Arial", 12))
-label_search.pack(fill='x', pady=5)
-entry_search = tk.Entry(top_frame, font=("Arial", 12))
-entry_search.pack(fill='x', pady=5)
-entry_search.bind("<Return>", search_book)
-
-btn_search = tk.Button(top_frame, text="Rechercher", command=search_book, font=("Arial", 12))
-btn_search.pack(pady=5)
-
-listbox_books = tk.Listbox(top_frame, font=("Arial", 12))
-listbox_books.pack(fill="both", expand=True, pady=5)
+listbox_products = tk.Listbox(top_frame, font=("Arial", 12))
+listbox_products.pack(fill="both", expand=True, pady=5)
 refresh_listbox()
 
-btn_edit = tk.Button(top_frame, text="Éditer le livre sélectionné", command=edit_book, font=("Arial", 12))
+btn_edit = tk.Button(top_frame, text="Éditer sélection", command=edit_product, font=("Arial", 12))
 btn_edit.pack(pady=5)
 
-btn_delete = tk.Button(top_frame, text="Supprimer le livre sélectionné", command=delete_book, font=("Arial", 12))
+btn_delete = tk.Button(top_frame, text="Supprimer sélection", command=delete_product, font=("Arial", 12))
 btn_delete.pack(pady=5)
 
 # --- Partie basse : Formulaire dans une zone défilable ---
@@ -201,20 +274,15 @@ canvas.bind("<Configure>", on_configure)
 canvas.bind_all("<MouseWheel>", on_mouse_wheel)
 
 # Les autres composants du formulaire...
-label_title = tk.Label(scrollable_frame, text="Titre", font=("Arial", 12))
-label_title.pack(fill='x', pady=5)
-entry_title = tk.Entry(scrollable_frame, font=("Arial", 12))
-entry_title.pack(fill='x', pady=5)
+label_nom = tk.Label(scrollable_frame, text="Nom de l'objet", font=("Arial", 12))
+label_nom.pack(fill='x', pady=5)
+entry_nom = tk.Entry(scrollable_frame, font=("Arial", 12))
+entry_nom.pack(fill='x', pady=5)
 
-label_author = tk.Label(scrollable_frame, text="Auteur", font=("Arial", 12))
-label_author.pack(fill='x', pady=5)
-entry_author = tk.Entry(scrollable_frame, font=("Arial", 12))
-entry_author.pack(fill='x', pady=5)
-
-label_location = tk.Label(scrollable_frame, text="Emplacement", font=("Arial", 12))
-label_location.pack(fill='x', pady=5)
-entry_location = tk.Entry(scrollable_frame, font=("Arial", 12))
-entry_location.pack(fill='x', pady=5)
+label_prix = tk.Label(scrollable_frame, text="Prix (saisir le chiffre uniquement)", font=("Arial", 12))
+label_prix.pack(fill='x', pady=5)
+entry_prix = tk.Entry(scrollable_frame, font=("Arial", 12))
+entry_prix.pack(fill='x', pady=5)
 
 label_image = tk.Label(scrollable_frame, text="Image", font=("Arial", 12))
 label_image.pack(fill='x', pady=5)
@@ -223,27 +291,34 @@ entry_image.pack(fill='x', pady=5)
 btn_select_image = tk.Button(scrollable_frame, text="Sélectionner une image", command=select_image, font=("Arial", 12))
 btn_select_image.pack(pady=5)
 
-label_keywords = tk.Label(scrollable_frame, text="Mots clés (séparés par des virgules)", font=("Arial", 12))
-label_keywords.pack(fill='x', pady=5)
-entry_keywords = tk.Entry(scrollable_frame, font=("Arial", 12))
-entry_keywords.pack(fill='x', pady=5)
+label_description = tk.Label(scrollable_frame, text="Description", font=("Arial", 12))
+label_description.pack(fill='x', pady=5)
+entry_description = tk.Text(scrollable_frame, height=5, font=("Arial", 12))
+entry_description.pack(fill='x', pady=5)
 
-var_special = tk.BooleanVar()
-checkbox_special = tk.Checkbutton(scrollable_frame, text="Mention spéciale", variable=var_special, font=("Arial", 12))
-checkbox_special.pack(pady=5)
-
-label_reviews = tk.Label(scrollable_frame, text="Avis (séparés par des retours à la ligne)", font=("Arial", 12))
-label_reviews.pack(fill='x', pady=5)
-entry_reviews = tk.Text(scrollable_frame, height=5, font=("Arial", 12))
-entry_reviews.pack(fill='x', pady=5)
-
-label_summary = tk.Label(scrollable_frame, text="Résumé", font=("Arial", 12))
-label_summary.pack(fill='x', pady=5)
-entry_summary = tk.Text(scrollable_frame, height=5, font=("Arial", 12))
-entry_summary.pack(fill='x', pady=5)
-
-btn_add = tk.Button(scrollable_frame, text="Ajouter un livre", command=add_book, font=("Arial", 12))
+btn_add = tk.Button(scrollable_frame, text="Ajouter l'objet", command=add_product, font=("Arial", 12))
 btn_add.pack(pady=5)
+
+label_couleurs = tk.Label(scrollable_frame, text="Couleurs disponibles", font=("Arial", 12, "bold"))
+label_couleurs.pack(fill='x', pady=(10, 5))
+
+frame_couleurs_container = tk.Frame(scrollable_frame)
+frame_couleurs_container.pack(fill='x', pady=5)
+
+color_vars = {} # Dictionnaire pour stocker les variables des checkboxes
+
+conn = sqlite3.connect(DB_PATH)
+cursor = conn.cursor()
+cursor.execute("SELECT nom FROM couleurs_ref")
+couleurs_db = [r[0] for r in cursor.fetchall()]
+conn.close()
+
+for i, color in enumerate(couleurs_db):
+    var = tk.BooleanVar()
+    color_vars[color] = var
+    cb = tk.Checkbutton(frame_couleurs_container, text=color, variable=var, font=("Arial", 10))
+    cb.grid(row=i//3, column=i%3, sticky="w", padx=5, pady=2)
+
 btn_save = tk.Button(scrollable_frame, text="Sauvegarder les modifications", state="disabled", font=("Arial", 12))
 btn_save.pack(pady=5)
 

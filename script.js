@@ -1,147 +1,127 @@
-let livres = [];
+// Fonction pour sélectionner une couleur
+window.selectColor = (element) => {
+    // Trouve le conteneur parent des pastilles
+    const container = element.parentElement;
+    // Retire la classe 'selected' de toutes les pastilles de ce produit
+    container.querySelectorAll('.color-swatch').forEach(swatch => swatch.classList.remove('selected'));
+    // Ajoute la classe 'selected' à la pastille cliquée
+    element.classList.add('selected');
+};
 
-// Charge les livres depuis le fichier JSON
-fetch('data/livres.json')
-    .then(response => response.json())
-    .then(data => {
-        livres = data;
-        afficherNombreDeLivres(); // Met à jour le nombre total de livres
-    })
-    .catch(error => console.error('Erreur lors du chargement du fichier JSON:', error));
-
-// Fonction de recherche
-function rechercher() {
-    let query = document.getElementById('search').value.toLowerCase();
+// Fonction pour gérer le clic sur "Commander"
+window.passerCommande = (button) => {
+    const card = button.closest('.produit');
+    const nom = card.querySelector('h3').innerText;
+    const prix = card.querySelector('.prix').innerText;
     
-    if (query === "mention spéciale") {
-        let resultats = livres.filter(livre => livre.mention_speciale);
-        afficherLivres(resultats);
-        return;
-    }    
+    const selectedSwatch = card.querySelector('.color-swatch.selected');
+    let couleurChoisie = "Non spécifiée";
 
-    if (query.length > 0) {
-        let resultats = livres.filter(livre => {
-            return livre.titre.toLowerCase().includes(query) ||
-                   livre.auteur.toLowerCase().includes(query) ||
-                   livre.mots_cles.some(mot => mot.toLowerCase().includes(query));
-        });
-
-        // Tri par pertinence
-        resultats.sort((a, b) => {
-            let scoreA = 0;
-            let scoreB = 0;
-
-            // Priorité au titre
-            if (a.titre.toLowerCase().includes(query)) scoreA += 100;
-            if (b.titre.toLowerCase().includes(query)) scoreB += 100;
-
-            // Priorité à l’auteur
-            if (a.auteur.toLowerCase().includes(query)) scoreA += 50;
-            if (b.auteur.toLowerCase().includes(query)) scoreB += 50;
-
-            // Priorité aux mots-clés (plus un mot-clé est tôt dans la liste, plus il compte)
-            let indexA = a.mots_cles.findIndex(mot => mot.toLowerCase().includes(query));
-            let indexB = b.mots_cles.findIndex(mot => mot.toLowerCase().includes(query));
-
-            if (indexA !== -1) scoreA += 20 - indexA;
-            if (indexB !== -1) scoreB += 20 - indexB;
-
-            return scoreB - scoreA;
-        });
-
-        // Séparer les livres normaux et ceux de l'enfance
-        let normaux = resultats.filter(livre => !["Enfance", "Petite enfance"].includes(livre.emplacement));
-        let enfance = resultats.filter(livre => livre.emplacement === "Enfance");
-        let petiteEnfance = resultats.filter(livre => livre.emplacement === "Petite enfance");
-
-        // Réassembler dans l'ordre souhaité
-        resultats = [...normaux, ...enfance, ...petiteEnfance];
-
-        afficherLivres(resultats);
-    } else {
-        afficherLivres([]);
-    }
-}
-
-function afficherNombreDeLivres() {
-    let compteurLivres = document.getElementById('compteur-livres');
-    if (!compteurLivres) {
-        compteurLivres = document.createElement('p');
-        compteurLivres.id = 'compteur-livres';
-        compteurLivres.style.fontSize = '1em';
-        compteurLivres.style.fontWeight = 'bold';
-        compteurLivres.style.marginTop = '10px';
-        compteurLivres.style.color = '#3b2a2a';
-        document.querySelector('.search-container').appendChild(compteurLivres);
-    }
-    compteurLivres.textContent = `La bibliothèque compte actuellement ${livres.length} livres`;
-}
-
-function afficherLivres(resultats) {
-    let resultatsContainer = document.getElementById('resultats');
-    resultatsContainer.innerHTML = '';
-
-    if (resultats.length === 0) {
-        resultatsContainer.innerHTML = '<p>Aucun livre trouvé... <br>Cherche des mots-clés en lien avec ce qui t\'intéresse ou demande-moi si tu ne trouves pas</p>';
-        return;
+    // S'il y a des pastilles de couleur et qu'une est sélectionnée
+    if (selectedSwatch) {
+        couleurChoisie = selectedSwatch.dataset.color;
+    } else if (card.querySelector('.color-swatches-container')) {
+        // S'il y a des couleurs mais aucune n'est sélectionnée
+        alert("Veuillez sélectionner une couleur avant de commander.");
+        return; // On arrête la fonction ici
     }
 
-    resultats.forEach(livre => {
-        let livreDiv = document.createElement('div');
-        livreDiv.classList.add('livre');
+    const subject = encodeURIComponent(`Commande : ${nom} (${couleurChoisie})`);
+    const body = encodeURIComponent(`Bonjour,\n\nJe souhaite commander l'objet suivant :\n- Nom : ${nom}\n- Couleur : ${couleurChoisie}\n- Prix : ${prix}\n\nMerci de me contacter pour le paiement et la livraison.`);
+    
+    // Ouvre le client mail dans un nouvel onglet
+    window.open(`mailto:leon.alleaumevoyard@gmail.com?subject=${subject}&body=${body}`, '_blank');
+};
 
-        let avisHTML = livre.avis.length > 0 ? 
-            livre.avis.map(avis => `<div class="avis-case">${avis}</div>`).join('') :
-            '<p>Aucun avis pour ce livre.</p>';
 
-        let emplacement = livre.emplacement && livre.emplacement.trim() !== "" ? livre.emplacement : "Inconnu, n\'hésite pas à demander de l'aide à Léon, il sera ravi de t'aider à trouver ce livre!";
-        let resumeComplet = livre.resume && livre.resume.trim() !== "" ? livre.resume : "Pas de résumé.";
-        let resumeCourt = resumeComplet.length > 300 ? resumeComplet.substring(0, 300) + '...' : resumeComplet;
-        let voirPlus = resumeComplet.length > 300 ? `<span class="voir-plus" style="cursor: pointer; font-weight: bold;"> Voir plus</span>` : '';
+document.addEventListener('DOMContentLoaded', () => {
+    const dataUrl = 'data/produits.json';
+    const resultsContainer = document.getElementById('resultats');
+    const searchInput = document.getElementById('searchBar');
+    let allProducts = []; // Pour stocker les produits en mémoire
 
-        livreDiv.innerHTML = `
-            ${livre.mention_speciale ? `<div class="bandeau">📖 Me parle pas tant que t'as pas lu ça !</div>` : ''}
-            <div class="infos-livre">
-                <div class="image">
-                    <img src="${livre.image}" alt="${livre.titre}">
-                </div>
-                <div class="separateur"></div>
-                <div class="details">
-                    <h3>${livre.titre}</h3>
-                    ${livre.auteur && livre.auteur.trim() !== "" ? `<p><strong>Auteur(s):</strong> ${livre.auteur}</p>` : ''}
-                    <p><strong>Emplacement:</strong> ${emplacement}</p>
-                    <p><strong>Résumé:</strong> <span class="resume-court">${resumeCourt}</span><span class="resume-complet" style="display: none;">${resumeComplet}</span>${voirPlus}</p>
-                </div>
-            </div>
-            <section class="avis">
-                ${avisHTML}
-            </section>
-        `;
+    // Affiche un message de chargement
+    resultsContainer.innerHTML = '<p>Chargement des créations...</p>';
+    
+    // Fonction pour afficher une liste de produits donnée
+    const displayProducts = (productsToDisplay) => {
+        resultsContainer.innerHTML = '';
 
-        resultatsContainer.appendChild(livreDiv);
-    });
+        if (productsToDisplay.length === 0) {
+            resultsContainer.innerHTML = '<p>Aucune création trouvée.</p>';
+            return;
+        }
 
-    document.querySelectorAll('.voir-plus').forEach(element => {
-        element.addEventListener('click', function () {
-            let parent = this.parentElement;
-            let court = parent.querySelector('.resume-court');
-            let complet = parent.querySelector('.resume-complet');
-            if (complet.style.display === 'none') {
-                complet.style.display = 'inline';
-                court.style.display = 'none';
-                this.textContent = ' Voir moins';
-            } else {
-                complet.style.display = 'none';
-                court.style.display = 'inline';
-                this.textContent = ' Voir plus';
+        // Ce dictionnaire fait le lien entre le nom de la couleur et son code CSS
+        const colorMap = {
+            "Blanc": "white", "Noir": "black", "Gris": "#808080", "Bleu": "#007bff",
+            "Rouge": "#dc3545", "Vert": "#28a745", "Jaune": "#ffc107", "Violet": "#6f42c1",
+            "Orange": "#fd7e14", "Rose": "#e83e8c", "Or": "#FFD700", "Argent": "#C0C0C0"
+        };
+
+        productsToDisplay.forEach(product => {
+            let colorsHtml = '';
+            // Vérifie si le produit a des couleurs définies
+            if (product.couleurs_disponibles && product.couleurs_disponibles.length > 0) {
+                const couleurs = product.couleurs_disponibles.split(',').map(c => c.trim());
+                const swatches = couleurs.map((colorName, index) => {
+                    const colorValue = colorMap[colorName] || colorName; // Utilise le nom si non trouvé
+                    const isSelected = index === 0 ? 'selected' : ''; // Sélectionne la première par défaut
+                    return `<div class="color-swatch ${isSelected}" 
+                                 style="background-color: ${colorValue};" 
+                                 data-color="${colorName}"
+                                 onclick="selectColor(this)"></div>`;
+                }).join('');
+
+                colorsHtml = `
+                    <div class="options-container">
+                        <label>Couleur :</label>
+                        <div class="color-swatches-container">${swatches}</div>
+                    </div>
+                `;
             }
-        });
-    });
-}
+            
+            const productHtml = `
+                <div class="produit">
+                    ${product.image ? `<img src="${product.image}" alt="Image de ${product.nom}" class="produit-image">` : ''}
+                    <div class="produit-contenu">
+                        <h3>${product.nom}</h3>
+                        <p class="description">${product.description}</p>
+                        ${colorsHtml}
 
-// Vérifier la touche "Entrée" pour effectuer la recherche
-function verifierEntree(event) {
-    if (event.key === 'Enter') {
-        rechercher();
-    }
-}
+                        <div class="footer-details">
+                            <span class="prix">${product.prix}</span>
+                            <button onclick="window.passerCommande(this)" class="btn-commander">Commander</button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            resultsContainer.innerHTML += productHtml;
+        });
+    };
+
+    fetch(dataUrl)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`Erreur HTTP! Statut: ${response.status}`);
+            }
+            return response.json();
+        })
+        .then(products => {
+            allProducts = products; // On sauvegarde la liste complète
+            displayProducts(allProducts); // On affiche tout au début
+        })
+        .catch(error => {
+            console.error('Erreur lors du chargement des produits:', error);
+            resultsContainer.innerHTML = '<p style="color: red;">Impossible de charger les produits. Vérifiez la console pour les détails.</p>';
+        });
+
+    // Écouteur pour la barre de recherche
+    searchInput.addEventListener('input', (e) => {
+        const searchTerm = e.target.value.toLowerCase();
+        const filteredProducts = allProducts.filter(product => 
+            product.nom.toLowerCase().includes(searchTerm)
+        );
+        displayProducts(filteredProducts);
+    });
+});

@@ -7,7 +7,7 @@ Pour mettre à jour ton dépôt GitHub avec les modifications de ton site, utili
 3. Pousser les modifications vers GitHub :
    git pushgit remote add origin https://github.com/Jeanardeche/Boutique-3D.git
 
-   site: https://jeanardeche.github.io/site-bibliotheque/
+   site: https://jeanardeche.github.io/Boutique-3D/
 -->
 
 <!DOCTYPE html>
@@ -15,31 +15,32 @@ Pour mettre à jour ton dépôt GitHub avec les modifications de ton site, utili
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bibliothèque</title>
+    <title>Boutique 3D</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <header class="header">
-        <img src="images/en_tete.jpg" alt="Bibliothèque dans la forêt" class="header-image">
         <div class="overlay"></div>
     </header>
 
     <section class="intro">
-        <h1>Bienvenue à la Bibliothèque</h1>
-        <p>Cherche des livres, lis-les et donne-nous ton avis dans le petit livre prévu à cet effet! <br> N'oublie pas ton nom car je rajouterai ton commentaire sur le site. 
-        </p>
+        <h1>Votre Atelier de Créations 3D</h1>
+        <p>Donnez vie à vos idées avec nos objets uniques et personnalisables.</p>
+        
         <div class="search-container">
-            <input type="text" id="search" placeholder="Chercher un livre..." onkeydown="verifierEntree(event)">
-            <span class="search-icon" onclick="rechercher()">
-                <img src="images/loupe.png" alt="Loupe" style="width: 20px; height: 20px;">
-            </span>
+            <input type="text" id="searchBar" placeholder="Rechercher une création (ex: vase, robot...)" autocomplete="off">
         </div>
     </section>
     
     <section id="resultats" class="livres-list">
-        <!-- Les livres seront insérés ici par JavaScript -->
+        <!-- Les produits seront insérés ici par JavaScript -->
     </section>
 
     <script src="script.js"></script>
+
+    <footer>
+        <p>&copy; 2026 Boutique 3D - Créations originales</p>
+        <p>Contactez-nous pour toute demande personnalisée !</p>
+    </footer>
 </body>
 </html>
