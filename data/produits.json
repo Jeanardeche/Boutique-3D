@@ -1,34 +1,74 @@
 [
     {
-        "id": 1,
-        "nom": "saucisse en 3D",
-        "prix": "432€",
-        "image": "images/1.jpeg",
-        "description": "blougi",
-        "couleurs_disponibles": "Jaune"
-    },
-    {
-        "id": 3,
-        "nom": "objet 1",
-        "prix": "15€",
-        "image": "images/3.jpeg",
-        "description": "",
-        "couleurs_disponibles": "Gris,Jaune,Vert"
-    },
-    {
-        "id": 4,
-        "nom": "nom de l'objet1",
-        "prix": "230€",
-        "image": "images/1.jpeg",
-        "description": "description",
-        "couleurs_disponibles": "Argent,Blanc,Bleu,Gris,Jaune,Noir,Or,Orange,Rose,Rouge,Vert,Violet"
-    },
-    {
         "id": 5,
         "nom": "Dinosaure flexible qui offre coeur",
         "prix": "5€",
-        "image": "images/image.png",
+        "image": "images/image.png,images/1.jpeg,images/2.jpeg,images/3.jpeg",
         "description": "Ce dinosaure est parfait pour offrir à ceux qu'on aime. Il est conçu pour être flexible et pouvoir bouger un peu la queue.",
-        "couleurs_disponibles": "Jaune,Orange,Rouge,Vert,Violet"
+        "couleurs_disponibles": "Blanc,Bleu clair,Bronze,Jaune,Noir,Orange,Rouge,Vert Opale,Vert clair,Vert simple,Violet",
+        "parties_perso": null
+    },
+    {
+        "id": 7,
+        "nom": "Tube de rangement de pièces",
+        "prix": "2€",
+        "image": "images/tuberangement.png",
+        "description": "Tubes de rangement pour ranger tous types de pièces. Merci de préciser pour quel type de pièce doit être l'objet.",
+        "couleurs_disponibles": "Blanc,Bleu clair,Bronze,Jaune,Noir,Orange,Rouge,Vert Opale,Vert clair,Vert simple,Violet",
+        "parties_perso": null
+    },
+    {
+        "id": 8,
+        "nom": "Porte carte personnalisable",
+        "prix": "10€",
+        "image": "images/3.jpeg,images/1.jpeg,images/2.jpeg",
+        "description": "Porte carte entièrement personnalisable. Chaque pièce est de la couleur que vous voulez. Il est possible d'utiliser plusieurs couleurs pour les parties intérieures.",
+        "couleurs_disponibles": "Blanc,Bleu clair,Bronze,Jaune,Noir,Orange,Rouge,Vert Opale,Vert clair,Vert simple,Violet",
+        "parties_perso": "Parties extérieures, pochette 1, pochette 2, pochette 3, pochette 4, pochette 5"
+    },
+    {
+        "id": 9,
+        "nom": "Captureur d'insectes",
+        "prix": "6€",
+        "image": "images/insectcatcher.png",
+        "description": "Cet outil est extrêmement pratique pour capturer des insectes sans avoir à les toucher. Il permet grâce à un sysystème très bien conçu d'enfermer et de libérer l'insecte à partir du manche. Une fenêtre transparente permet également de voir l'insecte capturé.",
+        "couleurs_disponibles": "Blanc,Bleu clair,Bronze,Jaune,Noir,Orange,Rouge,Vert Opale,Vert clair,Vert simple,Violet",
+        "parties_perso": "Partie avant, manche, partie coulissante du manche"
+    },
+    {
+        "id": 10,
+        "nom": "Support pour baguettes asiatiques",
+        "prix": "0,50€",
+        "image": "images/baguette.png",
+        "description": "Cet objet peut-être d'une précieuse aide pour manger avec des baguettes.",
+        "couleurs_disponibles": "Blanc,Bleu clair,Bronze,Jaune,Noir,Orange,Rouge,Vert Opale,Vert clair,Vert simple,Violet",
+        "parties_perso": ""
+    },
+    {
+        "id": 11,
+        "nom": "Papier toilette mouton",
+        "prix": "5€",
+        "image": "images/shawnpq.png",
+        "description": "Ce mouton donne une allure incroyable à votre papier toilette en le transformant en Shawn le mouton.",
+        "couleurs_disponibles": "",
+        "parties_perso": ""
+    },
+    {
+        "id": 12,
+        "nom": "Dague",
+        "prix": "7€",
+        "image": "images/dague.png",
+        "description": "Une magnifique dague en 2 couleurs.",
+        "couleurs_disponibles": "Blanc,Bleu clair,Bronze,Jaune,Noir,Orange,Rouge,Vert Opale,Vert clair,Vert simple,Violet",
+        "parties_perso": "Couleur majoritaire, couleur 2"
+    },
+    {
+        "id": 13,
+        "nom": "Gâteau forme pénis",
+        "prix": "5€",
+        "image": "images/zizicutter.png",
+        "description": "Pour faire des sablés ou des gâteaux. Les filaments utilisés sont certifiés pour un usage alimentaire.",
+        "couleurs_disponibles": "Blanc,Bleu clair,Bronze,Jaune,Noir,Orange,Rouge,Vert Opale,Vert clair,Vert simple,Violet",
+        "parties_perso": ""
     }
 ]
