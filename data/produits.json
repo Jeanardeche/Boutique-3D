@@ -33,7 +33,7 @@
         "image": "images/insectcatcher.png",
         "description": "Cet outil est extrêmement pratique pour capturer des insectes sans avoir à les toucher. Il permet grâce à un sysystème très bien conçu d'enfermer et de libérer l'insecte à partir du manche. Une fenêtre transparente permet également de voir l'insecte capturé.",
         "couleurs_disponibles": "Blanc,Bleu clair,Bronze,Jaune,Noir,Orange,Rouge,Vert Opale,Vert clair,Vert simple,Violet",
-        "parties_perso": "Partie avant, manche, partie coulissante du manche"
+        "parties_perso": "Partie avant, Manche, Partie coulissante du manche"
     },
     {
         "id": 10,
@@ -60,7 +60,7 @@
         "image": "images/dague.png",
         "description": "Une magnifique dague en 2 couleurs.",
         "couleurs_disponibles": "Blanc,Bleu clair,Bleu clair bis,Bronze,Jaune,Noir,Orange,Orange clair,Rouge,Rouge bis,Vert Opale,Vert bis,Vert clair,Vert simple,Violet,Violet clair",
-        "parties_perso": "Couleur majoritaire, couleur 2"
+        "parties_perso": "Couleur majoritaire, Couleur 2"
     },
     {
         "id": 13,
