@@ -43,7 +43,9 @@ def init_db():
         ("Blanc", "#FFFFFF"), ("Vert simple", "#28CC00"), ("Vert Opale", "#00783C"),
         ("Vert clair", "#66FF00"), ("Rouge", "#FF0000"), ("Orange", "#FF5A00"),
         ("Violet", "#560079"), ("Noir", "#000000"), ("Jaune", "#EBFF00"),
-        ("Bleu clair", "#0096E6"), ("Bronze", "#D6B31A")
+        ("Bleu clair", "#0096E6"), ("Bronze", "#D6B31A"),
+        ("Orange clair", "#eea411"), ("Vert bis", "#13bf57"), ("Violet clair", "#a46ee5"),
+        ("Rouge bis", "#f84443"), ("Bleu clair bis", "#39aafd")
     ]
     cursor.executemany("INSERT INTO couleurs_ref VALUES (?, ?)", defaults)
 

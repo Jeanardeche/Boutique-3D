@@ -3,19 +3,19 @@
         "id": 5,
         "nom": "Dinosaure flexible qui offre coeur",
         "prix": "5€",
-        "image": "images/image.png,images/1.jpeg,images/2.jpeg,images/3.jpeg",
+        "image": "images/image.png",
         "description": "Ce dinosaure est parfait pour offrir à ceux qu'on aime. Il est conçu pour être flexible et pouvoir bouger un peu la queue.",
         "couleurs_disponibles": "Blanc,Bleu clair,Bronze,Jaune,Noir,Orange,Rouge,Vert Opale,Vert clair,Vert simple,Violet",
-        "parties_perso": null
+        "parties_perso": ""
     },
     {
         "id": 7,
-        "nom": "Tube de rangement de pièces",
+        "nom": "Tube rangement pièces",
         "prix": "2€",
         "image": "images/tuberangement.png",
         "description": "Tubes de rangement pour ranger tous types de pièces. Merci de préciser pour quel type de pièce doit être l'objet.",
         "couleurs_disponibles": "Blanc,Bleu clair,Bronze,Jaune,Noir,Orange,Rouge,Vert Opale,Vert clair,Vert simple,Violet",
-        "parties_perso": null
+        "parties_perso": ""
     },
     {
         "id": 8,
@@ -59,7 +59,7 @@
         "prix": "7€",
         "image": "images/dague.png",
         "description": "Une magnifique dague en 2 couleurs.",
-        "couleurs_disponibles": "Blanc,Bleu clair,Bronze,Jaune,Noir,Orange,Rouge,Vert Opale,Vert clair,Vert simple,Violet",
+        "couleurs_disponibles": "Blanc,Bleu clair,Bleu clair bis,Bronze,Jaune,Noir,Orange,Orange clair,Rouge,Rouge bis,Vert Opale,Vert bis,Vert clair,Vert simple,Violet,Violet clair",
         "parties_perso": "Couleur majoritaire, couleur 2"
     },
     {
